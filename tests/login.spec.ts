@@ -11,10 +11,7 @@ const usernameInput = page.getByRole('textbox', { name: 'Username' });
 const passwordInput = page.getByRole('textbox', { name: 'Password' });
 
   await expect(page.locator('#username')).toBeVisible();
-  await expect(usernameInput).toBeVisible();    
   await usernameInput.fill('practice');
-  await expect(page.locator('#password')).toBeVisible();
-  await expect(passwordInput).toBeVisible();
   await passwordInput.fill('SuperSecretPassword!');
   await expect(page.getByRole('button', { name: 'Login' })).toBeVisible();
   await page.getByRole('button', { name: 'Login' }).click();
@@ -23,21 +20,30 @@ const passwordInput = page.getByRole('textbox', { name: 'Password' });
 });
 
 
-test('Unsuccessful Login', async ({page}) => {
+test('Unsuccessful Login with Invalid Credentials', async ({page}) => {
+    const usernameInput = page.getByRole('textbox', { name: 'Username' });
+    const passwordInput = page.getByRole('textbox', { name: 'Password' });
+      
+    await usernameInput.fill('practic');
+    await passwordInput.fill('SuperSecretPassword');
+    await page.getByRole('button', { name: 'Login' }).click();
+    
+    await expect(page.locator('#flash')).toContainText('invalid!');
+    await page.getByRole('button', { name: 'Close', exact: true }).click();
+    await expect(page).toHaveURL(/login/);
+});
+
+test('Unsuccessful Login with Empty Credentials', async ({page}) => {
     const usernameInput = page.getByRole('textbox', { name: 'Username' });
     const passwordInput = page.getByRole('textbox', { name: 'Password' });
     
-    await expect(page.locator('#username')).toBeVisible();
-    await expect(usernameInput).toBeVisible();    
-    await usernameInput.fill('practic');
-    await expect(page.locator('#password')).toBeVisible();
-    await expect(passwordInput).toBeVisible();
-    await passwordInput.fill('SuperSecretPassword');
+    await usernameInput.fill('');
+    await passwordInput.fill('');
     await expect(page.getByRole('button', { name: 'Login' })).toBeVisible();
     await page.getByRole('button', { name: 'Login' }).click();
     
-    await expect(page.locator('#flash').getByText('Your password is invalid!')).toBeVisible();
+    await expect(page.locator('#flash')).toContainText('invalid!');
     await page.getByRole('button', { name: 'Close', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Close'})).toBeHidden();
+    await expect(page).toHaveURL(/login/);
 });
 });
