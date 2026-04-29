@@ -15,8 +15,10 @@ const passwordInput = page.getByRole('textbox', { name: 'Password' });
   await passwordInput.fill('SuperSecretPassword!');
   await expect(page.getByRole('button', { name: 'Login' })).toBeVisible();
   await page.getByRole('button', { name: 'Login' }).click();
+  await expect(page.locator('#flash')).toContainText('You logged into a secure area!');
   await expect(page.getByRole('link', { name: 'Logout' })).toBeVisible();
   await page.getByRole('link', { name: 'Logout' }).click();
+
 });
 
 
@@ -47,3 +49,4 @@ test('Unsuccessful Login with Empty Credentials', async ({page}) => {
     await expect(page).toHaveURL(/login/);
 });
 });
+ 
