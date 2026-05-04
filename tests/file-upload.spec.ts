@@ -1,8 +1,8 @@
 import {test, expect} from '@playwright/test';
 import path from 'path';
 const files = {
-  valid: path.join(__dirname, './fixtures/small-file.jpg'),
-  large: path.join(__dirname, './fixtures/large-file.msi'),
+  valid: path.join(__dirname, './fixtures/142kb-small-file-jpg.jpg'),
+  large: path.join(__dirname, './fixtures/1mb-large-file-png.png'),
 };
 
 test.describe('File upload tests', () => {
