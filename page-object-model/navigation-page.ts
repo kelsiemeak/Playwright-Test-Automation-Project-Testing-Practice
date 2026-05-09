@@ -6,6 +6,8 @@ export class NavigationPage {
   readonly loginButton: Locator;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
+  readonly logOutButton: Locator;
+  readonly dismissBtn: Locator;
 
 
   constructor (page: Page) {
@@ -14,8 +16,17 @@ export class NavigationPage {
     this.loginButton = this.page.getByRole('button', { name: 'Login' })
     this.usernameInput = this.page.getByRole('textbox', { name: 'Username' });
     this.passwordInput = this.page.getByRole('textbox', { name: 'Password' });
+    this.logOutButton =  this.page.getByRole('link', { name: 'Logout' });
+    this.dismissBtn = this.page.getByText('Close', { exact: true });
   }
 
+// Method to close popup if it appears
+  async closePopupIfPresent() {
+    if (await this.dismissBtn.isVisible({ timeout: 2000 })) {
+      await this.dismissBtn.click();
+    }
+  }
+  // Method to perform successful login
 async successfulLogin(username: string, password: string) { 
     await this.loginPageButton.click(); 
     await this.usernameInput.fill(username);
@@ -23,8 +34,20 @@ async successfulLogin(username: string, password: string) {
     await this.loginButton.click(); 
 };
 
-async fileUploadPage() {
-  await this.page.getByRole('link', {name: 'File Upload'}).click();
-}
+// Method to perform unsuccessful login with invalid credentials
+async unsuccessfulLogin(invalidUsername: string, invalidPassword: string) { 
+   await this.loginPageButton.click(); 
+    await this.usernameInput.fill(invalidUsername);
+    await this.passwordInput.fill(invalidPassword);
+    await this.loginButton.click(); 
+};
+
+// Method to perform unsuccessful login with empty credentials
+async emptyLogin(emptyUsername: string, emptyPassword: string) {
+    await this.loginPageButton.click();
+    await this.usernameInput.fill(emptyUsername);
+    await this.passwordInput.fill(emptyPassword);
+    await this.loginButton.click();
+};
 }
  
