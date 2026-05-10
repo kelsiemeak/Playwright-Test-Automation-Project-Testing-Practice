@@ -6,7 +6,7 @@ export class NavigationPage {
   readonly loginButton: Locator;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
-  readonly logOutButton: Locator;
+  readonly logoutButton: Locator;
   readonly dismissBtn: Locator;
 
 
@@ -16,7 +16,7 @@ export class NavigationPage {
     this.loginButton = this.page.getByRole('button', { name: 'Login' })
     this.usernameInput = this.page.getByRole('textbox', { name: 'Username' });
     this.passwordInput = this.page.getByRole('textbox', { name: 'Password' });
-    this.logOutButton =  this.page.getByRole('link', { name: 'Logout' });
+    this.logoutButton =  this.page.getByRole('link', { name: 'Logout' });
     this.dismissBtn = this.page.getByText('Close', { exact: true });
   }
 
@@ -49,5 +49,9 @@ async emptyLogin(emptyUsername: string, emptyPassword: string) {
     await this.passwordInput.fill(emptyPassword);
     await this.loginButton.click();
 };
+
+async logout() {
+    await this.logoutButton.click();
+}
 }
  
