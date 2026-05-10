@@ -14,7 +14,8 @@ test('Login with valid credentials', async ({page}) => {
     const password = 'SuperSecretPassword!';
     await navigateTo.successfulLogin(username, password);
     await expect(page.locator('#flash')).toContainText('You logged into a secure area!');
-
+    await expect(navigateTo.logoutButton).toBeVisible();
+    await navigateTo.logout();
 });
 
 test('Login with invalid credentials', async ({page}) => {
@@ -36,4 +37,3 @@ test('Login with empty credentials', async ({page}) => {
     await expect(page.locator('#flash')).toContainText('invalid!');
     await expect(page).toHaveURL(/login/);
 });
-
