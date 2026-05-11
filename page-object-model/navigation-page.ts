@@ -1,4 +1,5 @@
-import {Page} from '@playwright/test';
+import {Page, Locator} from '@playwright/test';
+
 
 export class NavigationPage {
   readonly page: Page
@@ -8,6 +9,12 @@ export class NavigationPage {
   readonly passwordInput: Locator;
   readonly logoutButton: Locator;
   readonly dismissBtn: Locator;
+  readonly fileInput: Locator;
+  readonly fileSubmitButton: Locator;
+  readonly fileUploaderHeader: Locator;
+  readonly fileUploadedHeader: Locator;
+  readonly fileTooLargeText: Locator;
+
 
 
   constructor (page: Page) {
@@ -18,6 +25,11 @@ export class NavigationPage {
     this.passwordInput = this.page.getByRole('textbox', { name: 'Password' });
     this.logoutButton =  this.page.getByRole('link', { name: 'Logout' });
     this.dismissBtn = this.page.getByText('Close', { exact: true });
+    this.fileInput = this.page.getByTestId('file-input');
+    this.fileSubmitButton = this.page.getByTestId('file-submit');
+    this.fileUploaderHeader = this.page.getByRole('heading', { name: 'File Uploader page for' });
+    this.fileUploadedHeader = this.page.getByRole('heading', { name: 'File Uploaded!' });
+    this.fileTooLargeText = this.page.getByText(/File too large/i);
   }
 
 // Method to close popup if it appears
@@ -52,6 +64,22 @@ async emptyLogin(emptyUsername: string, emptyPassword: string) {
 
 async logout() {
     await this.logoutButton.click();
+}
+
+
+async successfulUpload(filepath: string) {
+ await this.fileInput.setInputFiles(filepath);
+ await this.fileSubmitButton.click();
+};
+
+
+async noFileUploaded() {
+  await this.fileSubmitButton.click();
+}
+
+async fileTooLarge(filepath: string) {
+  await this.fileInput.setInputFiles(filepath);
+ await this.fileSubmitButton.click();
 }
 }
  
